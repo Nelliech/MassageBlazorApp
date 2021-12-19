@@ -45,7 +45,7 @@ public  partial class AddVisit
 
     private async void SubmitVisit()
     {
-        VisitVm.PatientId = patientId;
+        VisitVm.PatientId = patientId; //test
         DidVisitFromDate(VisitVm.VisitDate);
         await visitService.AddVisit(VisitVm);
         NavManager.NavigateTo("Massage/Patient/"+patientId);
