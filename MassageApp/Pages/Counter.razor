@@ -1,0 +1,31 @@
+﻿@page "/counter"
+@using MassageApp.Domain.Interfaces
+@using MassageApp.Domain.Models
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+
+@code {
+    private int currentCount = 0;
+    ////Dodawanie kogos działa
+    //[Inject]
+    //protected IGenericRepository GenericRepository { get; set; }
+
+    //public Patient Patient{ get; set; }
+    //Patient pat = new Patient { FirstName="ta", UserId="32", PhoneNumber="421" };
+    //private async void SubmitPatient()
+    //{
+    //    await GenericRepository.Add<Patient>(pat);
+    //}
+    private void IncrementCount()
+    {
+        currentCount++;
+        //SubmitPatient();
+    }
+
+}

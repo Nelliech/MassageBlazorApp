@@ -1,0 +1,152 @@
+﻿@page "/Massage/addpatient"
+
+@using AntDesign
+@using MassageApp.Domain.Interfaces
+@using MassageApp.Domain.Models
+
+
+  <EditForm class="d-flex justify-content-center" Model="@PatientVm" OnValidSubmit="@SubmitPatient">
+
+      <Space Style="width: 75%" Direction="DirectionVHType.Vertical">
+      <ObjectGraphDataAnnotationsValidator />
+      <ValidationSummary />
+      <SpaceItem >
+        <h1 class="text-center display-3">Nowy Pacjent</h1>
+
+           <div class="form-group">
+                <label>Numer Telefonu</label>
+                <InputText class="form-control" @bind-Value="PatientVm.PhoneNumber" />
+            </div>
+
+            <div class="form-group">
+                <label>Nazwa Pacjenta</label>
+                <InputText class="form-control" @bind-Value="PatientVm.PatientName" />
+            </div>
+      </SpaceItem>
+        @*SeriousIllness*@
+        @if(PatientVm.SeriousIllnesses.Count>0)
+        {
+            
+                <SpaceItem>  
+                    <Card Title=@("Poważne Choroby") >
+                        @for(var i=0; i<PatientVm.SeriousIllnesses.Count; i++)
+                        {
+                                var index = i;
+                                var indexView= i+1;
+                                <hr/>
+                                <h4>Choroba nr.@indexView</h4>
+
+                                SeriousIllness = PatientVm.SeriousIllnesses.ElementAt(i);
+                                SeriousIllness.PatientId=PatientVm.Id;
+                                
+                                <i>Nazwa Choroby</i>
+                                <InputText class="form-control" @bind-Value="SeriousIllness.Name"></InputText> 
+                                
+
+                                <p><i>Opis</i></p>
+                                <InputTextArea  class="form-control" @bind-Value="SeriousIllness.Description" ></InputTextArea>
+                                
+                                <hr/>
+                                var item =PatientVm.SeriousIllnesses.ElementAt(index);
+                                <Button Type="@ButtonType.Primary" Size="@ButtonSize.Default" Style="width: 100%;"
+                                    @onclick="@(()=>PatientVm.SeriousIllnesses.Remove(PatientVm.SeriousIllnesses.ElementAt(index)))">
+                                    Usuń
+                                </Button>
+                        }
+                    </Card>
+                </SpaceItem>  
+            
+        }
+
+        <div class="form-group">
+            <Button Type="@ButtonType.Primary" Size="@ButtonSize.Large" Style="width: 100%;"
+                @onclick="@(()=>PatientVm.SeriousIllnesses.Add(new SeriousIllness()))">                        
+                Dodaj Poważne Choroby
+                </Button>
+        </div>
+            
+        @*Injury *@
+        @if (PatientVm.Injurys.Count>0)
+        {
+            
+                <SpaceItem>  
+                    <Card Title=@("Kontuzje") >
+                        @for (var i = 0; i<PatientVm.Injurys.Count; i++)
+                        {
+                            var index = i;
+                            var indexView = i+1;
+                            <hr/>
+
+                        <h4>Kontuzja nr.@indexView</h4>
+
+                        var injurys = PatientVm.Injurys.ElementAt(i);
+                        injurys.PatientId=PatientVm.Id;
+                        DateTime today = DateTime.Today;
+                        @*injurys.InjuryDate=today;*@
+                        <i>Nazwa Kontuzji</i>
+                            <InputText class="form-control" @bind-Value="injurys.Name"></InputText>
+                            <i>Przybliżona data</i>
+                            
+                            <InputDate class="form-control" @bind-Value="injurys.InjuryDate"></InputDate>   
+                            <hr/>
+                            var item =PatientVm.Injurys.ElementAt(index);
+                                <Button Type="@ButtonType.Primary" Size="@ButtonSize.Default" Style="width: 100%;"
+                                    @onclick="@(()=>PatientVm.Injurys.Remove(PatientVm.Injurys.ElementAt(index)))">
+                                    Usuń
+                                </Button>
+                        }
+                    </Card>
+                </SpaceItem>  
+            
+        }
+            <div class="form-group">
+                <Button Type="@ButtonType.Primary" Size="@ButtonSize.Large" Style="width: 100%;"
+                    @onclick="@(()=>PatientVm.Injurys.Add(new Injury()))">                        
+                    Dodaj Kontuzje
+                </Button>
+        </div>
+        
+        @*Allergy *@
+        @if (PatientVm.Allergies.Count>0)
+        {
+            
+                <SpaceItem>  
+                    <Card Title=@("Alergie")>
+                        @for (var i = 0; i<PatientVm.Allergies.Count; i++)
+                        {
+                            var index = i;
+                            var indexView = i+1;
+                            <hr/>
+                            <h4>Alergia nr.@indexView</h4>
+
+                            var allergies = PatientVm.Allergies.ElementAt(i);
+                            allergies.PatientId=PatientVm.Id;
+                            <i>Alergia na :</i>
+                            <InputText class="form-control" @bind-Value="allergies.Name"></InputText>                            
+                            <hr/>
+                            var item =PatientVm.Allergies.ElementAt(index);
+                            <Button Type="@ButtonType.Primary" Size="@ButtonSize.Default" Style="width: 100%;"
+                                @onclick="@(()=>PatientVm.Allergies.Remove(PatientVm.Allergies.ElementAt(index)))">
+                                Usuń
+                            </Button>       
+                          }                       
+                    </Card>
+                </SpaceItem>  
+            
+        }
+            <div class="form-group">
+                 <Button Type="@ButtonType.Primary" Size="@ButtonSize.Large" Style="width: 100%;"
+                    @onclick="@(()=>PatientVm.Allergies.Add(new Allergy()))">                        
+                    Dodaj Alergie
+                 </Button>
+            </div>
+        <p>Dodatkowe informacje </p>
+        <InputTextArea @bind-Value="PatientVm.AdditionalInformation" ></InputTextArea>
+
+        <br/>
+
+        <button type="submit" class="btn btn-primary">Dodaj Pacjenta</button>
+        </Space>
+    </EditForm>
+    
+

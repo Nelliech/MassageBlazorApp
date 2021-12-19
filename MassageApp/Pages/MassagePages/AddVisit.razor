@@ -1,0 +1,171 @@
+﻿@page "/Massage/Addvisit/{patientId:int}"
+@using Microsoft.VisualBasic
+<Card>
+    <EditForm class="d-flex justify-content-center" Model="@VisitVm" OnValidSubmit="@SubmitVisit">
+
+        <Space Style="width: 75%" Direction="DirectionVHType.Vertical">
+            <ObjectGraphDataAnnotationsValidator />
+            <ValidationSummary />
+            <div class="row">
+                <SpaceItem>
+
+                    <h1 style="text-align: center;" class="display-3"><b>Nowa Wizyta</b></h1>
+                    <ObjectGraphDataAnnotationsValidator />
+                    <ValidationSummary />
+                    <CardGrid class="w-50 col-md-4 ">
+                        <div class="mx-auto" >
+                            <p class="h6">Data wizyty</p>
+                            <DatePicker  class="w-100 form-control"
+                                         Format="dd/MM/yyyy"  @bind-Value="VisitVm.VisitDate"/>
+                            <p class="h6">Powód Wizyty</p>
+                            <InputTextArea style="width: 100%" class="form-control" @bind-Value="VisitVm.ReasonVisit"/>
+                        </div>
+                    </CardGrid>
+                    <CardGrid class="w-50 col-md-4 ">
+                        <div class="mx-auto">
+                            <p class="h6">Rodzaj masażu</p>
+                            <RadioGroup @bind-Value="@VisitVm.TypeMassageId">
+                                <Radio Style="@style" Value="@(1)">Relaksacyjny</Radio>
+                                <Radio Style="@style" Value="@(2)">Leczniczy</Radio>
+                                <Radio Style="@style" Value="@(3)">Sportowy</Radio>
+                                <Radio Style="@style" Value="@(4)">Ceremonialny</Radio>
+                                <Radio Style="@style" Value="@(5)">
+                                    Inny
+                                    @if (VisitVm.TypeMassageId == 5)
+                                    {
+                                        <br/>
+                                        <InputTextArea  @bind-Value="@VisitVm.IfTypeMassageOther"></InputTextArea>
+                                    }
+                                </Radio>
+                            </RadioGroup>
+                        </div>
+                    </CardGrid>
+                    <CardGrid class="w-100 col-md-4" >
+                        <div class="text-center">
+                            <p class="h6">Wnioski wzrokowe</p>
+                            <InputTextArea class="w-50 form-control mx-auto" @bind-Value="VisitVm.DiagnosticMoreOrLess"/>
+                            <p class="h6">Opinia pacjenta</p>
+                            <InputTextArea class="w-50 form-control mx-auto" @bind-Value="VisitVm.PatientsOpinion"/>
+                            <p class="h6">Wnioski po wizycie</p>
+                            <InputTextArea class="w-50 form-control mx-auto" @bind-Value="VisitVm.RateAfterVisit"/>
+                        </div>
+                    </CardGrid>
+                </SpaceItem>
+            </div>
+            
+            <CardGrid class="w-100 col-md-4 ">
+                <div class="row">
+                    <div class="w-50 col-md-4 form-group">
+                        @if (VisitVm.Drugs.Count > 0)
+                        {
+                            <SpaceItem>
+                                <div class="w-2">
+
+                                    <Card Title=@("Leki")>
+                                        @for (var i = 0; i < VisitVm.Drugs.Count; i++)
+                                        {
+
+
+                                            var index = i;
+                                            var indexView = i + 1;
+                                            <hr/>
+                                            <h4>Lek nr.@indexView</h4>
+
+                                            var drugs = VisitVm.Drugs.ElementAt(i);
+                                            drugs.VisitId = VisitVm.Id;
+
+                                            <i>Lek</i>
+                                            <InputText class="form-control" @bind-Value="drugs.Name"></InputText>
+
+
+                                            <p><i>Powód</i></p>
+                                            <InputTextArea class="form-control" @bind-Value="drugs.Reason"></InputTextArea>
+
+                                            <hr/>
+                                            var item = VisitVm.Drugs.ElementAt(index);
+                                            <Button Type="@ButtonType.Primary" Size="@ButtonSize.Default" Style="width: 100%;"
+                                                    @onclick="@(() => VisitVm.Drugs
+                                                                  .Remove(VisitVm.Drugs.ElementAt(index)))">
+                                                Usuń
+                                            </Button>
+
+                                        }
+
+                                    </Card>
+                                </div>
+
+                            </SpaceItem>
+                        }
+                        <div class="form-group">
+                            <Button Type="@ButtonType.Primary" Size="@ButtonSize.Large" Style="width: 100%;"
+                                    @onclick="@(() => VisitVm.Drugs
+                                                  .Add(new Domain.Models.Drug()))">
+                                Dodaj Lek
+                            </Button>
+                        </div>
+                    
+                    </div>
+
+                    <div class="w-50 col-md-4 form-group">
+
+                        @if (VisitVm.MassagePreparations.Count > 0)
+                        {
+
+                            <SpaceItem>
+                                <Card Title=@("Użyte Preparaty")>
+                                    <div>
+                                        @for (var i = 0; i < VisitVm.MassagePreparations.Count; i++)
+                                        {
+
+                                            var index = i;
+                                            var indexView = i + 1;
+                                            <hr/>
+                                            <h4>Preparat nr.@indexView</h4>
+
+                                            var massagePreparations = VisitVm.MassagePreparations.ElementAt(i);
+                                            massagePreparations.VisitId = VisitVm.Id;
+
+                                            <i>Lek</i>
+                                            <InputText class="form-control" @bind-Value="massagePreparations.Name">
+                                            </InputText>
+
+                                            <hr/>
+                                            var item = VisitVm.MassagePreparations.ElementAt(index);
+                                            <Button Type="@ButtonType.Primary" Size="@ButtonSize.Default" Style="width: 100%;"
+                                                    @onclick="@(() => VisitVm.MassagePreparations
+                                                                  .Remove(VisitVm.MassagePreparations.ElementAt(index)))">
+                                                Usuń
+                                            </Button>
+
+                                        }
+                                    </div>
+                                </Card>
+                            </SpaceItem>
+                        }
+                        <div class="form-group">
+                            <Button Type="@ButtonType.Primary" Size="@ButtonSize.Large" Style="width: 100%;"
+                                    @onclick="@(() => VisitVm.MassagePreparations
+                                                  .Add(new Domain.Models.MassagePreparation()))">
+                                Dodaj Użyte Preparaty
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </CardGrid>
+            <CardGrid class="w-100 col-md-4 ">
+                <div class="row">
+                    <Checkbox @bind-Checked="isChecked" @bind-Value="VisitVm.IsPaid" >
+                        <p class="h6">@($"{(isChecked ? "Wizyta Opłacona":"Wizyta Nieopłacona")}")</p>
+                    </Checkbox>
+                    <button type="submit" class="w-50 btn btn-primary mx-auto">Dodaj Wizyte</button>
+                </div>
+
+            </CardGrid>
+        </Space>
+    </EditForm>
+</Card>
+
+
+
+
+

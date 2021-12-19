@@ -1,0 +1,78 @@
+﻿@page "/Massage/patient"
+
+@using AntDesign
+@using MassageApp.Domain.Interfaces
+@using MassageApp.Domain.Models
+<h3>Patients</h3>
+
+
+@if (PatientListVm is null)
+{
+    <p><em>Loading... !</em></p>
+}
+<Table DataSource="@PatientListVm"  >
+
+    <ActionColumn >
+        <a href="Patient/@context.Id">
+            <Icon Type="right" Theme="outline"/>
+        </a>
+    </ActionColumn>
+    
+    <Column 
+        
+        @bind-Field="@context.PhoneNumber" >
+            <a class="nav-link" href="Patient/@context.Id">
+                @context.PhoneNumber
+            </a>
+    </Column>
+
+    <Column  
+        @bind-Field="@context.PatientName"
+        Sortable>
+    </Column>
+
+    <Column
+        Format="MM/dd/yyyy" 
+        @bind-Field="@context.CreationDate"
+        Sortable>
+    </Column>
+
+    <ActionColumn >
+        <Space Size=@("middle")>
+            <SpaceItem>
+                 <a class="nav-link" href="Patient/@context.Id">
+                    <span class="oi oi-pencil" aria-hidden="true">Edit</span>
+                 </a>
+            </SpaceItem>
+        </Space>
+    </ActionColumn>
+</Table>
+@*<table class="table">
+            <thead>
+                <tr>
+                    <th>Numer Telefonu</th>   
+                    <th>Nazwisko</th>
+                    <th>Imie</th>
+                    <th></th>
+                                     
+                </tr>
+            </thead>
+        <tbody>
+            @foreach (var patient in ListPatients)
+            {
+                <tr>
+                    <td>@patient.PhoneNumber</td>
+                    <td>@patient.LastName</td>
+                    <td>@patient.FirstName</td>                    
+                    <td>
+                        <a class="nav-link" href="Patient/@patient.Id">
+                            <span class="oi oi-pencil" aria-hidden="true">Edit</span>
+                        </a>
+                        <a class="nav-link" href="Delete/@emp.Id">
+                            <span class="oi oi-trash" aria-hidden="true">Delete</span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@

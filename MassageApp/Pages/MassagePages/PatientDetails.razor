@@ -1,0 +1,128 @@
+﻿@page "/Massage/patient/{PatientId:int}"
+@using System.Linq;
+<div style="padding-top:15%;">
+@if (Patient is null)
+{
+    <p><em>Loading... !</em></p>
+}
+    <Card>
+        <h1 style="text-align:center;" class="display-3"><b>Pacjent</b></h1>
+        <div class="row">
+        <CardGrid class="col-md-4"  Style="width:50%; " Hoverable="true"> 
+            <div>
+                <h1 style="text-align:center">Dane</h1>
+                <p>Pacjent: @Patient.PatientName</p>
+                <p>Numer Telefonu : @Patient.PhoneNumber</p>
+            </div>
+        </CardGrid>
+        <CardGrid class="col-md-4" Style="width:50%;" Hoverable="true">
+            <div class="mx-auto">
+                <h1 style="text-align:center">Wizity</h1>
+                @{
+
+                    if (Patient.Visits != null)
+                    {
+                        // if(Patient.Visit.Any(p => p.IsPaid == false && p.DidVisit==true))
+                        // {
+                        //
+                        // }
+                        <table class="table">
+                         <thead>
+                            <tr>
+                              <th scope="col">#</th>
+                              <th scope="col">Data Wizyty</th>
+                              <th scope="col">Rodzaj masażu</th>
+
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                                @foreach(var visit in Patient.Visits)
+                                {
+                                   <th scope="row"> <Icon Type="exclamation" Theme="outline"/></th>
+                                   <td>@visit.VisitDate</td>
+                                   <td>@visit.TypeMassage.Name</td>
+                                }
+                           </tr>
+                           </tbody>
+
+                        </table>                      
+                    }
+                }
+            </div>
+        </CardGrid>
+        </div>
+        <CardGrid style="width:100%" Hoverable="false">
+            <CardGrid style="width:35%">
+                <h1 style="text-align:center">Kontuzje</h1>
+                    
+                        @if(Patient.Injurys!=null){
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Kontuzja</th>
+                                        <th scope="col">Data kontuzji</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        @foreach(var injury in Patient.Injurys)
+                                        {
+                                            <th scope="row" class="h3">@injury.Name</th>
+                                            <th scope="row" >@injury.InjuryDate.ToString("MM/dd/yyyy")</th>
+                                        }
+                                    </tr>
+                                </tbody>
+                          </table>
+                        }
+                    
+                    
+                        
+                <Button>Dodaj Kontuzje</Button>
+            </CardGrid>
+            <CardGrid style="width:30%">
+                <h1 style="text-align:center">Alergie</h1>
+                @if(Patient.Allergies!=null){
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Allergia</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            @foreach(var allergy in Patient.Allergies)
+                            {
+                                <th scope="row" class="h3">@allergy.Name</th>
+                            }
+                        </tr>
+                        </tbody>
+                    </table>
+                }
+                <Button>Dodaj Alergie</Button>
+            </CardGrid>
+            <CardGrid style="width:35%">
+                <h1 style="text-align:center">Poważne choroby</h1>
+                @if(Patient.SeriousIllnesses!=null){
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Kontuzja</th>
+                            <th scope="col">Data kontuzji</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            @foreach(var seriousIllness in Patient.SeriousIllnesses)
+                            {
+                                <th scope="row" class="h3">@seriousIllness.Name</th>
+                            }
+                        </tr>
+                        </tbody>
+                    </table>
+                }
+                <Button>Dodaj Chorobe</Button>
+            </CardGrid>
+        </CardGrid>
+    </Card>
+</div>
